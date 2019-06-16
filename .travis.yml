@@ -1,48 +1,39 @@
-# language: julia
-# os:
-#   - linux
-# julia:
-#   - 1.0
-#   - 1.1
-# notifications:
-#   email: false
-# git:
-#   depth: 99999999
-# cache:
-#   timeout: 1000
-#   directories:
-#     - downloads
-# env:
-#   global:
-#     - BINARYBUILDER_DOWNLOADS_CACHE=downloads
-#     - BINARYBUILDER_AUTOMATIC_APPLE=true
-#   matrix:
-#     - TARGET=x86_64-linux-gnu
-#     - TARGET=i686-linux-gnu
-#     - TARGET=x86_64-apple-darwin14
-#     - TARGET=x86_64-unknown-freebsd
-#     # will be supported in future
-#     # - TARGET=x86_64-w64-mingw32
-#     # - TARGET=i686-w64-mingw32
-# sudo: required
-# before_script:
-#   - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
-# script:
-#   - julia build_tarballs.jl
+language: julia
+os:
+  - linux
+julia:
+  - 1.0
+  - 1.1
+notifications:
+  email: false
+git:
+  depth: 99999999
+cache:
+  timeout: 1000
+  directories:
+    - downloads
+env:
+  global:
+    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+    - BINARYBUILDER_AUTOMATIC_APPLE=true
+  matrix:
+    - TARGET=x86_64-linux-gnu
+    - TARGET=i686-linux-gnu
+    - TARGET=x86_64-apple-darwin14
+    - TARGET=x86_64-unknown-freebsd
+    - TARGET=x86_64-w64-mingw32
+    - TARGET=i686-w64-mingw32
+sudo: required
+before_script:
+  - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
+script:
+  - julia build_tarballs.jl
 
 jobs:
   include:
     - stage: deploy
-      # if: "tag =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+(a|b|rc)?[0-9]*$"
-      if: branch=master
-      language: julia
-      os:
-        - linux
+      if: "tag =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+(a|b|rc)?[0-9]*$"
       julia: 1.0
-      env:
-        global:
-          - BINARYBUILDER_DOWNLOADS_CACHE=downloads
-          - BINARYBUILDER_AUTOMATIC_APPLE=true
       sudo: required
       cache:
         timeout: 1000
@@ -53,8 +44,6 @@ jobs:
         - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
       script:
         - julia build_tarballs.jl
-        - pwd
-        - ls -l
       deploy:
         provider: releases
         api_key:
@@ -62,6 +51,6 @@ jobs:
         skip_cleanup: true
         file_glob: true
         file: products/*
-        # on:
-          # repo: unkcpz/SpglibBuilder
-          # tags: true
+        on:
+          repo: unkcpz/SpglibBuilder
+          tags: true

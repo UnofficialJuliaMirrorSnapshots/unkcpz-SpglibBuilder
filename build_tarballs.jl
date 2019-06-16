@@ -16,6 +16,9 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir
 cd spglib-1.12.2/
+if [[ ${target} == *-mingw32 ]]; then
+    sed -i -e 's/LIBRARY/RUNTIME/' CMakeLists.txt
+fi
 mkdir _build
 cd _build/
 cmake -DCMAKE_INSTALL_PREFIX=$prefix \
@@ -30,9 +33,11 @@ make install VERBOSE=1
 # platforms are passed in on the command line
 platforms = [
     MacOS(:x86_64),
-    Linux(:x86_64, libc=:glibc),
     FreeBSD(:x86_64),
-    Linux(:i686, libc=:glibc)
+    Linux(:i686, libc=:glibc),
+    Linux(:x86_64, libc=:glibc),
+    Windows(:i686),
+    Windows(:x86_64),
 ]
 
 # The products that we will ensure are always built
