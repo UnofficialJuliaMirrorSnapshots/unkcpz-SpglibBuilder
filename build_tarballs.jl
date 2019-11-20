@@ -3,19 +3,19 @@
 using BinaryBuilder
 
 name = "SpglibBuilder"
-version = v"1.13.0"
+version = v"0.2.0"
 
 # Collection of sources required to build SpglibBuilder
 sources = [
-    "https://github.com/atztogo/spglib/archive/v1.13.0.tar.gz" =>
-    "ed72ae7bdd129487c45ff7bebb8e2ac03074657060e068b015e7741c0271e16b",
+    "https://github.com/atztogo/spglib/archive/v1.14.1.tar.gz" =>
+    "9803b0648d9c2d99377f3e1c4cecf712320488403cd674192ec5cbe956bb3c78",
 
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir
-cd spglib-1.13.0/
+cd spglib-1.14.1/
 if [[ ${target} == *-mingw32 ]]; then
     sed -i -e 's/LIBRARY/RUNTIME/' CMakeLists.txt
 fi
